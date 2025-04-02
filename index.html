@@ -219,6 +219,397 @@
 <script src="assets/js/script.js"></script>
 <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Update your form submission handling
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the contact form
+        const contactForm = document.querySelector('.contact-form form');
+
+        // Clear any cached form data that might cause resubmission prompts
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+
+        // Add submit event listener
+        if (contactForm) {
+            // Change the form action to JavaScript:void(0) instead of "#"
+            contactForm.setAttribute('action', 'javascript:void(0);');
+
+            contactForm.addEventListener('submit', function(e) {
+                // Prevent the default form submission
+                e.preventDefault();
+
+                // Show a success message
+                const formGroups = this.querySelectorAll('.form-group');
+                const submitBtn = this.querySelector('button[type="submit"]');
+
+                // Create success message
+                const successMessage = document.createElement('div');
+                successMessage.style.color = 'var(--primary-color)';
+                successMessage.style.padding = '15px 0';
+                successMessage.style.textAlign = 'center';
+                successMessage.innerHTML = '<i class="fas fa-check-circle"></i> Message sent successfully!';
+
+                // Insert before submit button
+                submitBtn.parentNode.insertBefore(successMessage, submitBtn);
+
+                // Reset form fields
+                this.reset();
+
+                // Remove message after 3 seconds
+                setTimeout(() => {
+                    successMessage.remove();
+                }, 3000);
+            });
+        }
+
+        // Easter Egg 1: Konami Code
+        const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        let konamiPosition = 0;
+
+        document.addEventListener('keydown', function(e) {
+            // Check if the key pressed is the expected key in the sequence
+            if (e.key === konamiCode[konamiPosition]) {
+                konamiPosition++;
+
+                // If the entire sequence is completed
+                if (konamiPosition === konamiCode.length) {
+                    activateMatrixMode();
+                    konamiPosition = 0; // Reset for next time
+                }
+            } else {
+                konamiPosition = 0; // Reset on wrong key
+            }
+        });
+
+        // Easter Egg 2: Logo Click Sequence
+        const logo = document.querySelector('.logo');
+        let clickCount = 0;
+
+        logo.addEventListener('click', function(e) {
+            e.preventDefault();
+            clickCount++;
+
+
+            if (clickCount === 5) {
+                partyMode();
+                clickCount = 0;
+            }
+        });
+
+        // Easter Egg 3: Hidden Message
+        const messageInput = document.getElementById('message');
+        if (messageInput) {
+            messageInput.addEventListener('input', function() {
+                if (this.value.toLowerCase().includes('secret')) {
+                    revealSecretMessage();
+                }
+            });
+        }
+
+        function activateMatrixMode() {
+            // Create matrix container
+            const body = document.body;
+
+            // Create and play the matrix sound
+            const matrixSound = new Audio('assets/sounds/matrix.mp3');
+            matrixSound.loop = true;
+            matrixSound.volume = 0.7; // Set to 70% volume
+
+            // Play the sound with a user interaction promise resolution approach
+            const playPromise = matrixSound.play();
+
+            // Handle potential play() promise rejection (for browsers that block autoplay)
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Audio playback prevented by browser. User must interact with the page first.");
+                });
+            }
+
+            // Save original scroll position
+            const scrollPos = window.scrollY || document.documentElement.scrollTop;
+
+            // Prevent scrolling and zooming
+            document.documentElement.style.overflow = 'hidden';
+            document.documentElement.style.height = '100%';
+            document.body.style.overflow = 'hidden';
+            document.body.style.height = '100%';
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
+            document.body.style.top = `-${scrollPos}px`;
+
+            // Create matrix container with initial opacity 0
+            const matrixContainer = document.createElement('div');
+            matrixContainer.classList.add('matrix-container');
+            matrixContainer.style.position = 'fixed';
+            matrixContainer.style.top = '0';
+            matrixContainer.style.left = '0';
+            matrixContainer.style.width = '100%';
+            matrixContainer.style.height = '100%';
+            matrixContainer.style.zIndex = '9999';
+            matrixContainer.style.background = 'rgba(0, 0, 0, 0)';
+            matrixContainer.style.opacity = '0';
+            matrixContainer.style.transition = 'opacity 1.5s ease, background-color 2s ease';
+            matrixContainer.style.overflow = 'hidden';
+            body.appendChild(matrixContainer);
+
+            // Force reflow to ensure transition works
+            matrixContainer.offsetHeight;
+
+            // Fade in matrix container
+            setTimeout(() => {
+                matrixContainer.style.opacity = '1';
+                matrixContainer.style.background = 'rgba(0, 0, 0, 0.85)';
+            }, 100);
+
+            // Create matrix columns at staggered intervals
+            const totalColumns = 50;
+            let createdColumns = 0;
+
+            setTimeout(() => {
+                const createColumnInterval = setInterval(() => {
+                    if (createdColumns < totalColumns) {
+                        createMatrixColumn(matrixContainer);
+                        createdColumns++;
+                    } else {
+                        clearInterval(createColumnInterval);
+                    }
+                }, 80);
+            }, 800); // Wait for background to fade in first
+
+            // Display a message with delay
+            setTimeout(() => {
+                const message = document.createElement('div');
+                message.classList.add('matrix-message');
+                message.textContent = "You've discovered the Matrix! Click anywhere to return.";
+                message.style.position = 'fixed';
+                message.style.top = '50%';
+                message.style.left = '50%';
+                message.style.transform = 'translate(-50%, -50%) scale(0.9)';
+                message.style.opacity = '0';
+                message.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+                message.style.color = '#0f0';
+                message.style.padding = '20px';
+                message.style.border = '1px solid #0f0';
+                message.style.borderRadius = '5px';
+                message.style.fontFamily = 'monospace';
+                message.style.zIndex = '10000';
+                message.style.textAlign = 'center';
+                message.style.boxShadow = '0 0 20px rgba(0, 255, 0, 0.5)';
+                message.style.cursor = 'pointer';
+                message.style.transition = 'opacity 1s ease, transform 1s ease';
+                body.appendChild(message);
+
+                // Force reflow again
+                message.offsetHeight;
+
+                // Fade in message
+                setTimeout(() => {
+                    message.style.opacity = '1';
+                    message.style.transform = 'translate(-50%, -50%) scale(1)';
+                }, 100);
+            }, 2000);
+
+            // Click to revert
+            document.addEventListener('click', function resetMatrix() {
+                const matrixContainer = document.querySelector('.matrix-container');
+                const message = document.querySelector('.matrix-message');
+
+                // Stop the matrix sound with fade out
+                if (matrixSound) {
+                    const fadeAudio = setInterval(() => {
+                        // Only fade if volume is above 0.05
+                        if (matrixSound.volume > 0.05) {
+                            matrixSound.volume -= 0.05;
+                        } else {
+                            matrixSound.pause();
+                            matrixSound.currentTime = 0;
+                            clearInterval(fadeAudio);
+                        }
+                    }, 50);
+                }
+
+                // Fade out elements
+                if (matrixContainer) {
+                    matrixContainer.style.opacity = '0';
+                }
+
+                if (message) {
+                    message.style.opacity = '0';
+                    message.style.transform = 'translate(-50%, -50%) scale(0.9)';
+                }
+
+                // Remove after fade out
+                setTimeout(() => {
+                    if (matrixContainer) matrixContainer.remove();
+                    if (message) message.remove();
+
+                    // Restore scrolling
+                    const scrollY = document.body.style.top;
+                    document.documentElement.style.overflow = '';
+                    document.documentElement.style.height = '';
+                    document.body.style.overflow = '';
+                    document.body.style.height = '';
+                    document.body.style.position = '';
+                    document.body.style.width = '';
+                    document.body.style.top = '';
+                    window.scrollTo(0, parseInt(scrollY || '0') * -1);
+                }, 1000);
+
+                document.removeEventListener('click', resetMatrix);
+            }, { once: true });
+        }
+
+        function createMatrixColumn(container) {
+            const column = document.createElement('div');
+            column.style.position = 'absolute';
+            column.style.left = `${Math.random() * 100}%`;
+            column.style.top = `-${Math.random() * 50}px`;  // Random starting positions
+            column.style.color = '#0f0';
+            column.style.fontSize = '1.2rem';
+            column.style.fontFamily = 'monospace';
+            column.style.lineHeight = '1';
+            column.style.textShadow = '0 0 5px #0f0';
+            column.style.zIndex = '10000';
+            column.style.opacity = '0';
+            column.style.transition = 'opacity 0.8s ease';
+
+            // Randomize animation speed
+            const speed = 2 + Math.random() * 5;
+            column.style.animation = `matrixRain ${speed}s linear infinite`;
+
+            container.appendChild(column);
+
+            // Force reflow
+            column.offsetHeight;
+
+            // Fade in column
+            setTimeout(() => {
+                column.style.opacity = '1';
+            }, 100);
+
+            // Create characters with staggered appearance
+            const chars = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン1234567890";
+            const numberOfChars = 15 + Math.floor(Math.random() * 10);
+
+            for (let i = 0; i < numberOfChars; i++) {
+                setTimeout(() => {
+                    if (column.isConnected) { // Check if column is still in DOM
+                        const char = document.createElement('div');
+                        char.textContent = chars.charAt(Math.floor(Math.random() * chars.length));
+                        char.style.opacity = '0';
+                        char.style.transform = 'translateY(-10px)';
+                        char.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                        char.style.marginTop = '0.1rem';
+                        column.appendChild(char);
+
+                        // Force reflow
+                        char.offsetHeight;
+
+                        // Fade in character
+                        setTimeout(() => {
+                            char.style.opacity = i === 0 ? '1' : (1 - (i / numberOfChars) * 0.8).toString();
+                            char.style.transform = 'translateY(0)';
+                        }, 50);
+
+                        // Randomly change some characters over time
+                        setInterval(() => {
+                            if (Math.random() > 0.9 && char.isConnected) {
+                                char.textContent = chars.charAt(Math.floor(Math.random() * chars.length));
+                            }
+                        }, 1000 + Math.random() * 2000);
+                    }
+                }, i * 100 + Math.random() * 200); // Staggered appearance with randomness
+            }
+        }
+
+        function partyMode() {
+            // Check if cooldown is active
+            if (window.partyModeCooldown) {
+                return;
+            }
+
+            // Set cooldown
+            window.partyModeCooldown = true;
+            setTimeout(() => {
+                window.partyModeCooldown = false;
+            }, 10000); // 10 second cooldown
+
+            const icons = document.querySelectorAll('.floating-icon');
+            const originalPositions = [];
+
+            // Store original positions and add party class
+            icons.forEach(icon => {
+                const rect = icon.getBoundingClientRect();
+                originalPositions.push({
+                    top: icon.style.top,
+                    left: icon.style.left
+                });
+
+                icon.classList.add('party-icon');
+            });
+
+            // Create and play party sound with proper error handling and preloading
+            const partySound = new Audio('assets/sounds/party.ogg');
+            partySound.volume = 0.6;
+
+            // Preload the audio
+            partySound.preload = 'auto';
+
+            // Play only after user has interacted with the page
+            const playPromise = partySound.play();
+
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    console.log('Sound playing successfully');
+                }).catch(error => {
+                    console.warn('Sound play failed:', error);
+                });
+            }
+
+            // Create a message
+            const message = document.createElement('div');
+            message.textContent = "Party mode activated!";
+            message.classList.add('party-message');
+            document.body.appendChild(message);
+
+            // Return to normal after 5 seconds
+            setTimeout(() => {
+                icons.forEach((icon, index) => {
+                    icon.classList.remove('party-icon');
+                    icon.style.top = originalPositions[index].top;
+                    icon.style.left = originalPositions[index].left;
+                });
+                message.remove();
+
+                // Fade out sound if it's playing
+                if (!partySound.paused) {
+                    const fadeInterval = setInterval(() => {
+                        if (partySound.volume > 0.1) {
+                            partySound.volume -= 0.1;
+                        } else {
+                            partySound.pause();
+                            clearInterval(fadeInterval);
+                        }
+                    }, 100);
+                }
+            }, 5000);
+        }
+
+        function revealSecretMessage() {
+            const secretDiv = document.createElement('div');
+            secretDiv.classList.add('secret-message');
+            secretDiv.innerHTML = `
+                <p>You found the hidden message! Here's a secret about me:</p>
+                <p>I secretly dream of building a game that combines all my projects into one universe.</p>
+                <button class="close-secret">Close</button>
+            `;
+            document.body.appendChild(secretDiv);
+
+            secretDiv.querySelector('.close-secret').addEventListener('click', () => {
+                secretDiv.remove();
+            });
+        }})
 </script>
 </body>
 </html>
