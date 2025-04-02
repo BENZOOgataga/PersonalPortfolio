@@ -610,6 +610,1490 @@
                 secretDiv.remove();
             });
         }})
+
+    // Add this to the script section at the bottom of your HTML file
+
+    // Easter Egg 4: Disco Mode - type "disco"
+    let discoWord = "disco";
+    let discoPosition = 0;
+
+    document.addEventListener('keypress', function(e) {
+        // Check if the key pressed is the expected letter in "disco"
+        if (e.key.toLowerCase() === discoWord[discoPosition]) {
+            discoPosition++;
+
+            // If the entire word is completed
+            if (discoPosition === discoWord.length) {
+                activateDiscoMode();
+                discoPosition = 0; // Reset for next time
+            }
+        } else {
+            discoPosition = 0; // Reset on wrong key
+        }
+    });
+
+    function activateDiscoMode() {
+        const body = document.body;
+
+        // Check if audio dashboard is already active
+        if (document.querySelector('.audio-dashboard')) {
+            return;
+        }
+
+        // Store original title to restore it later
+        const heroTitle = document.querySelector('.hero h1');
+        const originalTitle = heroTitle.innerHTML;
+
+        // Change the title
+        heroTitle.innerHTML = 'Music <span>Enthusiast</span>';
+
+        // Create audio for disco mode
+        const discoAudio = new Audio('assets/sounds/mykindofdisco.mp3');
+        discoAudio.loop = true;
+        discoAudio.volume = 0.7;
+
+        // Play the audio with promise handling
+        const playPromise = discoAudio.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.log("Audio playback prevented by browser");
+            });
+        }
+
+        // Create disco dashboard
+        const dashboard = document.createElement('div');
+        dashboard.classList.add('disco-dashboard');
+        dashboard.innerHTML = `
+        <div class="disco-controls">
+            <div class="disco-title">🎵 DISCO MODE</div>
+            <div class="disco-actions">
+                <a href="https://youtu.be/_H5UO3c4YtM?si=ryU7yAFRbrFUSwpP" class="disco-btn video-link" target="_blank">
+                    <i class="fab fa-youtube"></i> Music
+                </a>
+                <button class="disco-btn effect-btn">Effect: 1</button>
+                <button class="disco-btn stop-btn">Stop</button>
+            </div>
+        </div>
+    `;
+        body.appendChild(dashboard);
+
+        // Create color overlay
+        const overlay = document.createElement('div');
+        overlay.classList.add('disco-overlay');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.zIndex = '999';
+        overlay.style.pointerEvents = 'none';
+        overlay.style.mixBlendMode = 'overlay';
+        body.appendChild(overlay);
+
+        // Add styles for the dashboard
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = `
+        .disco-dashboard {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--primary-color);
+            border-radius: 50px;
+            padding: 8px 16px;
+            z-index: 1001;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+            transition: all 0.3s ease;
+            animation: disco-pulse 1.5s infinite alternate;
+        }
+
+        .disco-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .disco-title {
+            font-weight: bold;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .disco-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .disco-btn {
+            background-color: rgba(139, 92, 246, 0.2);
+            color: var(--primary-color);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .disco-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .disco-btn i {
+            margin-right: 4px;
+        }
+
+        @keyframes colorChange {
+            0% { background-color: rgba(255, 0, 0, 0.3); }
+            16% { background-color: rgba(255, 165, 0, 0.3); }
+            33% { background-color: rgba(255, 255, 0, 0.3); }
+            50% { background-color: rgba(0, 128, 0, 0.3); }
+            66% { background-color: rgba(0, 0, 255, 0.3); }
+            83% { background-color: rgba(75, 0, 130, 0.3); }
+            100% { background-color: rgba(238, 130, 238, 0.3); }
+        }
+
+        @keyframes spin {
+            from { transform: translateX(-50%) rotate(0deg); }
+            to { transform: translateX(-50%) rotate(360deg); }
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+
+        @keyframes disco-pulse {
+            from { box-shadow: 0 0 15px rgba(139, 92, 246, 0.4); }
+            to { box-shadow: 0 0 30px rgba(139, 92, 246, 0.7); }
+        }
+    `;
+        document.head.appendChild(styleSheet);
+
+        // Make all icons party
+        const icons = document.querySelectorAll('.floating-icon');
+        icons.forEach(icon => {
+            icon.classList.add('party-icon');
+        });
+
+        // Create a disco ball
+        const discoBall = document.createElement('div');
+        discoBall.classList.add('disco-ball');
+        discoBall.style.position = 'fixed';
+        discoBall.style.top = '70px';
+        discoBall.style.left = '50%';
+        discoBall.style.transform = 'translateX(-50%)';
+        discoBall.style.width = '100px';
+        discoBall.style.height = '100px';
+        discoBall.style.borderRadius = '50%';
+        discoBall.style.background = 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(139, 92, 246, 0.5))';
+        discoBall.style.boxShadow = '0 0 50px rgba(255, 255, 255, 0.7)';
+        discoBall.style.zIndex = '1000';
+        discoBall.style.pointerEvents = 'none';
+        discoBall.innerHTML = `<div class="disco-reflection" style="position: absolute; top: 20%; left: 20%; width: 20%; height: 10%; background: rgba(255, 255, 255, 0.9); border-radius: 50%;"></div>`;
+        document.body.appendChild(discoBall);
+
+        // Set initial effects
+        overlay.style.animation = 'colorChange 3s infinite';
+        discoBall.style.animation = 'spin 3s linear infinite';
+
+        // Add event listeners for the dashboard buttons
+        let discoIntensity = 1;
+        const effectBtn = dashboard.querySelector('.effect-btn');
+        const stopBtn = dashboard.querySelector('.stop-btn');
+
+        effectBtn.addEventListener('click', function() {
+            discoIntensity = (discoIntensity % 3) + 1;
+            effectBtn.textContent = `Effect: ${discoIntensity}`;
+
+            // Apply different effects based on intensity level
+            switch(discoIntensity) {
+                case 1:
+                    // Default effects
+                    overlay.style.animation = 'colorChange 3s infinite';
+                    discoBall.style.animation = 'spin 3s linear infinite';
+                    document.querySelectorAll('h1, h2, h3').forEach(el => {
+                        el.style.animation = '';
+                    });
+                    break;
+                case 2:
+                    // More intense effects
+                    overlay.style.animation = 'colorChange 1s infinite';
+                    discoBall.style.animation = 'spin 1.5s linear infinite';
+                    document.querySelectorAll('h1, h2, h3').forEach(el => {
+                        el.style.animation = 'bounce 1s infinite alternate';
+                    });
+                    break;
+                case 3:
+                    // Go wild with effects
+                    overlay.style.animation = 'colorChange 0.5s infinite';
+                    discoBall.style.animation = 'spin 0.8s linear infinite';
+                    document.querySelectorAll('h1, h2, h3, p').forEach(el => {
+                        el.style.animation = 'bounce 0.5s infinite alternate';
+                    });
+                    break;
+            }
+        });
+
+        stopBtn.addEventListener('click', stopDiscoMode);
+
+        // Function to stop disco mode
+        function stopDiscoMode() {
+            // Fade out audio
+            const fadeInterval = setInterval(() => {
+                if (discoAudio.volume > 0.1) {
+                    discoAudio.volume -= 0.1;
+                } else {
+                    clearInterval(fadeInterval);
+                    discoAudio.pause();
+                }
+            }, 100);
+
+            // Restore icons
+            icons.forEach(icon => {
+                icon.classList.remove('party-icon');
+            });
+
+            // Remove overlay with transition
+            overlay.style.opacity = '0';
+            setTimeout(() => overlay.remove(), 500);
+
+            // Remove disco ball with transition
+            discoBall.style.opacity = '0';
+            setTimeout(() => discoBall.remove(), 500);
+
+            // Remove dashboard with transition
+            dashboard.style.opacity = '0';
+            dashboard.style.transform = 'translateX(-50%) translateY(100px)';
+            setTimeout(() => {
+                dashboard.remove();
+                styleSheet.remove();
+            }, 500);
+
+            // Reset any animations on elements
+            document.querySelectorAll('h1, h2, h3, p').forEach(el => {
+                el.style.animation = '';
+            });
+
+            // Restore original title
+            heroTitle.innerHTML = originalTitle;
+        }
+    }
+
+    // Easter Egg 5: Developer Mode - type "dev"
+    let devWord = "dev";
+    let devPosition = 0;
+
+    document.addEventListener('keypress', function(e) {
+        if (e.key.toLowerCase() === devWord[devPosition]) {
+            devPosition++;
+
+            if (devPosition === devWord.length) {
+                activateDeveloperMode();
+                devPosition = 0;
+            }
+        } else {
+            devPosition = 0;
+        }
+    });
+
+    function activateDeveloperMode() {
+        // Create developer console effect
+        const terminal = document.createElement('div');
+        terminal.style.position = 'fixed';
+        terminal.style.bottom = '0';
+        terminal.style.left = '0';
+        terminal.style.width = '100%';
+        terminal.style.height = '300px';
+        terminal.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+        terminal.style.color = '#0f0';
+        terminal.style.fontFamily = 'monospace';
+        terminal.style.padding = '15px';
+        terminal.style.overflow = 'auto';
+        terminal.style.zIndex = '9999';
+        terminal.style.borderTop = '2px solid #0f0';
+        terminal.style.boxShadow = '0 -5px 15px rgba(0, 255, 0, 0.2)';
+        terminal.style.transform = 'translateY(100%)';
+        terminal.style.transition = 'transform 0.3s ease';
+        document.body.appendChild(terminal);
+
+        // Add terminal content
+        terminal.innerHTML = `
+        <div>> Developer Mode Activated</div>
+        <div>> Welcome to BENZOOgataga's website terminal</div>
+        <div>> Type 'help' for available commands</div>
+        <div style="display:flex; margin-top:10px;">
+            <div style="color:#0f0;margin-right:5px;">$</div>
+            <input type="text" id="terminal-input" style="background:transparent;border:none;color:#0f0;font-family:monospace;width:100%;outline:none;">
+        </div>
+    `;
+
+        // Show terminal with animation
+        setTimeout(() => {
+            terminal.style.transform = 'translateY(0)';
+        }, 100);
+
+        // Focus on input
+        const input = document.getElementById('terminal-input');
+        input.focus();
+
+        // Track deleted elements to restore them
+        const deletedElements = [];
+
+        // Handle terminal commands
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const command = input.value.trim().toLowerCase();
+                const output = document.createElement('div');
+                output.style.marginBottom = '8px';
+
+                // Show command in terminal
+                const cmdLine = document.createElement('div');
+                cmdLine.innerHTML = `<span style="color:#0f0;">$</span> <span style="color:#ffcc00;">${input.value}</span>`;
+                cmdLine.style.marginBottom = '5px';
+                input.parentElement.parentElement.insertBefore(cmdLine, input.parentElement);
+
+                // Command output
+                switch(command) {
+                    case 'help':
+                        output.innerHTML = `
+                        <div>> Available commands:</div>
+                        <div style="padding-left:10px;">help - Display available commands</div>
+                        <div style="padding-left:10px;">about - Website info</div>
+                        <div style="padding-left:10px;">clear - Clear terminal</div>
+                        <div style="padding-left:10px;">exit - Exit developer mode</div>
+                        <div style="padding-left:10px;">rm header - Delete the header (temporarily)</div>
+                        <div style="padding-left:10px;">rm projects - Delete the projects section</div>
+                        <div style="padding-left:10px;">rm footer - Delete the footer</div>
+                        <div style="padding-left:10px;">rm icons - Delete floating icons</div>
+                        <div style="padding-left:10px;">rm gravity - Disable gravity on elements</div>
+                        <div style="padding-left:10px;">restore - Restore all deleted elements</div>
+                        <div style="padding-left:10px;">matrix - Activate Matrix mode</div>
+                        <div style="padding-left:10px;">disco - Activate Disco mode</div>
+                        <div style="padding-left:10px;">explode <element> - Make an element explode</div>
+                        <div style="padding-left:10px;">rainbow - Rainbow text effect</div>
+                    `;
+                        break;
+                    case 'about':
+                        output.innerHTML = `
+                        <div>> BENZOOgataga's Personal Website</div>
+                        <div>> Version: 1.0.0</div>
+                        <div>> Built with HTML, CSS, and JavaScript</div>
+                        <div>> Features various easter eggs - try to find them all (You already found one)!</div>
+                    `;
+                        break;
+                    case 'clear':
+                        // Clear all content except the input line
+                        const inputLine = input.parentElement;
+                        terminal.innerHTML = '';
+                        terminal.appendChild(inputLine);
+                        // Skip adding output
+                        input.value = '';
+                        terminal.scrollTop = terminal.scrollHeight;
+                        return;
+                    case 'exit':
+                        terminal.style.transform = 'translateY(100%)';
+                        setTimeout(() => {
+                            terminal.remove();
+                            // Restore any deleted elements
+                            restoreElements();
+                        }, 300);
+                        document.removeEventListener('keydown', closeTerminal);
+                        return;
+                    case 'rm header':
+                        const header = document.querySelector('header');
+                        if (header && !isDeleted(header)) {
+                            animateDelete(header);
+                            output.innerHTML = `<div style="color:#ff3333;">> Header deleted with style!</div>`;
+                        } else {
+                            output.innerHTML = `<div style="color:#ff9900;">> Header is already gone or unavailable</div>`;
+                        }
+                        break;
+                    case 'rm projects':
+                        const projects = document.querySelector('#projects');
+                        if (projects && !isDeleted(projects)) {
+                            animateDelete(projects);
+                            output.innerHTML = `<div style="color:#ff3333;">> Projects section has been vaporized!</div>`;
+                        } else {
+                            output.innerHTML = `<div style="color:#ff9900;">> Projects section is already gone or unavailable</div>`;
+                        }
+                        break;
+                    case 'rm footer':
+                        const footer = document.querySelector('footer');
+                        if (footer && !isDeleted(footer)) {
+                            animateDelete(footer);
+                            output.innerHTML = `<div style="color:#ff3333;">> Footer has been obliterated!</div>`;
+                        } else {
+                            output.innerHTML = `<div style="color:#ff9900;">> Footer is already gone or unavailable</div>`;
+                        }
+                        break;
+                    case 'rm icons':
+                        const icons = document.querySelectorAll('.floating-icon');
+                        if (icons.length > 0) {
+                            icons.forEach((icon, index) => {
+                                setTimeout(() => {
+                                    if (!isDeleted(icon)) animateDelete(icon, 'fly');
+                                }, index * 100);
+                            });
+                            output.innerHTML = `<div style="color:#ff3333;">> Icons have been launched into space!</div>`;
+                        } else {
+                            output.innerHTML = `<div style="color:#ff9900;">> No icons found to delete</div>`;
+                        }
+                        break;
+                    case 'rm gravity':
+                        applyAntiGravity();
+                        output.innerHTML = `<div style="color:#33ccff;">> Gravity disabled! Elements are floating!</div>`;
+                        break;
+                    case 'restore':
+                        if (deletedElements.length > 0) {
+                            restoreElements();
+                            output.innerHTML = `<div style="color:#33cc33;">> All elements restored successfully!</div>`;
+                        } else {
+                            output.innerHTML = `<div style="color:#ff9900;">> No elements to restore</div>`;
+                        }
+                        break;
+                    case 'matrix':
+                        output.innerHTML = `<div style="color:#0f0;">> Activating Matrix mode...</div>`;
+                        setTimeout(() => {
+                            activateMatrixMode();
+                        }, 1000);
+                        break;
+                    case 'disco':
+                        output.innerHTML = `<div style="color:#ff66ff;">> Let's get this party started!</div>`;
+                        setTimeout(() => {
+                            activateDiscoMode();
+                        }, 1000);
+                        break;
+                    case 'rainbow':
+                        applyRainbowEffect();
+                        output.innerHTML = `<div style="background:linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);-webkit-background-clip:text;color:transparent;font-weight:bold;">> Rainbow mode activated!</div>`;
+                        break;
+                    default:
+                        // Check for explode command
+                        if (command.startsWith('explode ')) {
+                            const target = command.split(' ')[1];
+                            let element;
+
+                            switch(target) {
+                                case 'header':
+                                    element = document.querySelector('header');
+                                    break;
+                                case 'footer':
+                                    element = document.querySelector('footer');
+                                    break;
+                                case 'projects':
+                                    element = document.querySelector('#projects');
+                                    break;
+                                case 'about':
+                                    element = document.querySelector('#about');
+                                    break;
+                                case 'contact':
+                                    element = document.querySelector('#contact');
+                                    break;
+                                default:
+                                    output.innerHTML = `<div style="color:#ff9900;">> Can't find element: ${target}</div>`;
+                            }
+
+                            if (element && !isDeleted(element)) {
+                                explodeElement(element);
+                                output.innerHTML = `<div style="color:#ff3333;">> ${target} has been exploded into pieces!</div>`;
+                            }
+                        } else {
+                            output.innerHTML = `<div style="color:#ff6666;">> Command not found: ${command}</div>
+                        <div style="color:#ff6666;">> Type 'help' for available commands</div>`;
+                        }
+                }
+
+                // Add output before the input line
+                if (output.innerHTML) {
+                    input.parentElement.parentElement.insertBefore(output, input.parentElement);
+                }
+
+                // Clear input
+                input.value = '';
+
+                // Scroll to bottom
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', function closeTerminal(e) {
+            if (e.key === 'Escape') {
+                terminal.style.transform = 'translateY(100%)';
+                setTimeout(() => {
+                    terminal.remove();
+                    // Restore any deleted elements
+                    restoreElements();
+                }, 300);
+                document.removeEventListener('keydown', closeTerminal);
+            }
+        });
+
+        // Helper functions for element manipulation
+        function animateDelete(element, type = 'shrink') {
+            // Store the original element for later restoration
+            const clone = element.cloneNode(true);
+            const style = window.getComputedStyle(element);
+            const rect = element.getBoundingClientRect();
+
+            const placeholder = document.createElement('div');
+            placeholder.style.height = `${rect.height}px`;
+            placeholder.style.margin = style.margin;
+            placeholder.style.padding = style.padding;
+            placeholder.style.opacity = '0';
+            placeholder.dataset.deleted = 'true';
+
+            // Store info for restoration
+            deletedElements.push({
+                placeholder: placeholder,
+                original: clone,
+                parent: element.parentNode
+            });
+
+            // Apply animation based on type
+            switch(type) {
+                case 'shrink':
+                    element.style.transition = 'all 0.5s ease-in';
+                    element.style.transform = 'scale(0.01)';
+                    element.style.opacity = '0';
+                    break;
+                case 'fly':
+                    element.style.transition = 'all 0.8s cubic-bezier(0.5, -0.5, 0.5, 1.5)';
+                    element.style.transform = `translate(${Math.random() > 0.5 ? '' : '-'}${Math.random() * 1000}px, ${Math.random() > 0.5 ? '' : '-'}${Math.random() * 1000}px) rotate(${Math.random() * 720}deg)`;
+                    element.style.opacity = '0';
+                    break;
+                case 'fade':
+                    element.style.transition = 'all 0.5s ease';
+                    element.style.opacity = '0';
+                    break;
+            }
+
+            // Remove after animation
+            setTimeout(() => {
+                element.parentNode.replaceChild(placeholder, element);
+            }, 800);
+        }
+
+        function explodeElement(element) {
+            // Store the original element for restoration
+            const clone = element.cloneNode(true);
+            const rect = element.getBoundingClientRect();
+
+            const placeholder = document.createElement('div');
+            placeholder.style.height = `${rect.height}px`;
+            placeholder.dataset.deleted = 'true';
+
+            // Create explosion particles
+            const pieces = 20;
+            const container = document.createElement('div');
+            container.style.position = 'absolute';
+            container.style.left = `${rect.left}px`;
+            container.style.top = `${rect.top}px`;
+            container.style.width = `${rect.width}px`;
+            container.style.height = `${rect.height}px`;
+            container.style.zIndex = '1000';
+
+            for (let i = 0; i < pieces; i++) {
+                const piece = document.createElement('div');
+                piece.style.position = 'absolute';
+                piece.style.left = `${Math.random() * 100}%`;
+                piece.style.top = `${Math.random() * 100}%`;
+                piece.style.width = `${Math.random() * 50 + 10}px`;
+                piece.style.height = `${Math.random() * 50 + 10}px`;
+                piece.style.backgroundColor = `hsl(${Math.random() * 30 + 10}, 100%, 50%)`;
+                piece.style.borderRadius = '50%';
+                piece.style.opacity = '0.7';
+                piece.style.transform = 'scale(0)';
+                piece.style.boxShadow = '0 0 10px rgba(255, 100, 0, 0.8)';
+
+                // Set animation
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 100 + Math.random() * 200;
+                const x = Math.cos(angle) * distance;
+                const y = Math.sin(angle) * distance;
+
+                piece.animate([
+                    { transform: 'scale(0) rotate(0deg)', opacity: 0 },
+                    { transform: 'scale(1) rotate(180deg)', opacity: 0.8, offset: 0.1 },
+                    { transform: `scale(0.5) translate(${x}px, ${y}px) rotate(360deg)`, opacity: 0 }
+                ], {
+                    duration: 1000 + Math.random() * 500,
+                    easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+                });
+
+                container.appendChild(piece);
+            }
+
+            document.body.appendChild(container);
+
+            // Store for restoration
+            deletedElements.push({
+                placeholder: placeholder,
+                original: clone,
+                parent: element.parentNode,
+                explosion: container
+            });
+
+            // Shrink the original
+            element.style.transition = 'all 0.3s ease';
+            element.style.transform = 'scale(0.9)';
+            element.style.opacity = '0';
+
+            setTimeout(() => {
+                element.parentNode.replaceChild(placeholder, element);
+
+                // Remove explosion after animation
+                setTimeout(() => {
+                    container.remove();
+                }, 1500);
+            }, 300);
+        }
+
+        function applyAntiGravity() {
+            const elements = [
+                ...document.querySelectorAll('.project-card'),
+                ...document.querySelectorAll('.skill'),
+                ...document.querySelectorAll('h1, h2, h3'),
+                ...document.querySelectorAll('.btn'),
+                ...document.querySelectorAll('nav a')
+            ];
+
+            elements.forEach((el, i) => {
+                setTimeout(() => {
+                    if (el) {
+                        el.style.transition = 'transform 1.5s cubic-bezier(0.2, 0.8, 0.2, 1.2)';
+                        el.style.transform = `translateY(${-20 - Math.random() * 40}px) rotate(${Math.random() * 10 - 5}deg)`;
+                    }
+                }, i * 50);
+            });
+
+            // Store info for restoration
+            deletedElements.push({
+                type: 'gravity',
+                elements: elements
+            });
+        }
+
+        function applyRainbowEffect() {
+            // Create style for rainbow animation
+            const styleSheet = document.createElement('style');
+            styleSheet.id = 'rainbow-style';
+            styleSheet.textContent = `
+        @keyframes rainbow {
+            0% { color: #ff0000; }
+            14% { color: #ff7f00; }
+            28% { color: #ffff00; }
+            42% { color: #00ff00; }
+            57% { color: #0000ff; }
+            71% { color: #4b0082; }
+            85% { color: #9400d3; }
+            100% { color: #ff0000; }
+        }
+
+        .rainbow-text {
+            animation: rainbow 2s linear infinite;
+            display: inline-block;
+        }
+    `;
+            document.head.appendChild(styleSheet);
+
+            // Only target text nodes in paragraphs, headings, and other safe elements
+            const textElements = document.querySelectorAll('h1, h2, h3, p, .btn, .tag, .skill');
+
+            // Store for restoration
+            const rainbowItems = {
+                type: 'rainbow',
+                elements: Array.from(textElements),
+                style: styleSheet,
+                originalColors: {}
+            };
+
+            // Apply rainbow effect to each element
+            textElements.forEach((el, index) => {
+                // Skip elements with complex HTML structure
+                if (el.querySelector('*')) return;
+
+                // Store original color
+                rainbowItems.originalColors[index] = el.style.color;
+
+                // Apply rainbow class with staggered animation delay
+                el.classList.add('rainbow-text');
+                el.style.animationDelay = `${index * 0.1}s`;
+            });
+
+            // Return the elements info for restoration
+            return rainbowItems;
+        }
+
+        function isDeleted(element) {
+            return element.dataset && element.dataset.deleted === 'true';
+        }
+
+        function restoreElements() {
+            if (deletedElements.length === 0) return;
+
+            deletedElements.forEach(item => {
+                if (item.type === 'gravity') {
+                    item.elements.forEach(el => {
+                        if (el) {
+                            el.style.transition = 'transform 1s ease';
+                            el.style.transform = '';
+                        }
+                    });
+                } else if (item.type === 'rainbow') {
+                    item.elements.forEach(el => {
+                        if (el && el._originalHTML) {
+                            el.innerHTML = el._originalHTML;
+                        }
+                    });
+                    if (item.style) item.style.remove();
+                } else {
+                    if (item.placeholder && item.placeholder.parentNode) {
+                        item.placeholder.parentNode.replaceChild(item.original, item.placeholder);
+                        // Apply a restoration animation
+                        item.original.style.opacity = '0';
+                        item.original.style.transform = 'scale(0.9)';
+                        setTimeout(() => {
+                            item.original.style.transition = 'all 0.5s ease';
+                            item.original.style.opacity = '1';
+                            item.original.style.transform = 'scale(1)';
+                        }, 50);
+                    }
+                    if (item.explosion) {
+                        item.explosion.remove();
+                    }
+                }
+            });
+
+            deletedElements.length = 0;
+        }
+    }
+
+    // Easter Egg 6: Secret Button - Hidden clickable element
+    document.addEventListener('DOMContentLoaded', function() {
+        const secretButton = document.createElement('div');
+        secretButton.style.position = 'fixed';
+        secretButton.style.width = '20px';
+        secretButton.style.height = '20px';
+        secretButton.style.bottom = '10px';
+        secretButton.style.right = '10px';
+        secretButton.style.cursor = 'pointer';
+        secretButton.style.zIndex = '100';
+        secretButton.style.opacity = '0.05'; // Nearly invisible
+        secretButton.style.borderRadius = '50%';
+        secretButton.style.border = '2px solid var(--primary-color)';
+        secretButton.title = "Secret button";
+
+        document.body.appendChild(secretButton);
+
+        secretButton.addEventListener('click', function() {
+            showSecretMessage();
+        });
+
+        function showSecretMessage() {
+            const secretModal = document.createElement('div');
+            secretModal.classList.add('secret-message');
+            secretModal.innerHTML = `
+            <h3>You Found the Secret Button!</h3>
+            <p>Congratulations on discovering this hidden easter egg!</p>
+            <p>"The best secrets are hidden in plain sight."</p>
+            <button class="close-secret">Close</button>
+        `;
+
+            document.body.appendChild(secretModal);
+
+            document.querySelector('.close-secret').addEventListener('click', function() {
+                secretModal.remove();
+            });
+        }
+    });
+
+    // Easter Egg: Phonk Mode - type "phonk"
+    let phonkWord = "phonk";
+    let phonkPosition = 0;
+
+    document.addEventListener('keypress', function(e) {
+        // Check if the key pressed is the expected letter in "phonk"
+        if (e.key.toLowerCase() === phonkWord[phonkPosition]) {
+            phonkPosition++;
+            if (phonkPosition === phonkWord.length) {
+                activatePhonkMode();
+                phonkPosition = 0;
+            }
+        } else {
+            phonkPosition = 0;
+        }
+    });
+
+    // Easter Egg: Lofi Mode - type "lofi"
+    let lofiWord = "lofi";
+    let lofiPosition = 0;
+
+    document.addEventListener('keypress', function(e) {
+        // Check if the key pressed is the expected letter in "lofi"
+        if (e.key.toLowerCase() === lofiWord[lofiPosition]) {
+            lofiPosition++;
+            if (lofiPosition === lofiWord.length) {
+                activateLofiMode();
+                lofiPosition = 0;
+            }
+        } else {
+            lofiPosition = 0;
+        }
+    });
+
+    function activatePhonkMode() {
+        const body = document.body;
+
+        // Check if any audio mode is already active
+        if (document.querySelector('.audio-dashboard')) {
+            return;
+        }
+
+        // Store original title to restore it later
+        const heroTitle = document.querySelector('.hero h1');
+        const originalTitle = heroTitle.innerHTML;
+
+        // Change the title
+        heroTitle.innerHTML = 'Phonk <span>Enthusiast</span>';
+
+        // Create audio for phonk mode
+        const phonkAudio = new Audio('assets/sounds/phonk.mp3');
+        phonkAudio.loop = true;
+        phonkAudio.volume = 0.7;
+
+        // Play the audio with promise handling
+        const playPromise = phonkAudio.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.log("Audio playback prevented by browser");
+            });
+        }
+
+        // Create dashboard
+        const dashboard = document.createElement('div');
+        dashboard.classList.add('audio-dashboard', 'phonk-dashboard');
+        dashboard.innerHTML = `
+        <div class="audio-controls">
+            <div class="audio-title">🔊 PHONK MODE</div>
+            <div class="audio-actions">
+                <a href="https://youtu.be/w-sQRS-Lc9k?si=UhbYgx15YjURynFO" class="audio-btn video-link" target="_blank">
+                    <i class="fab fa-youtube"></i> Music
+                </a>
+                <button class="audio-btn effect-btn">Effect: 1</button>
+                <button class="audio-btn stop-btn">Stop</button>
+            </div>
+        </div>
+    `;
+        body.appendChild(dashboard);
+
+        // Create color overlay
+        const overlay = document.createElement('div');
+        overlay.classList.add('phonk-overlay');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.zIndex = '999';
+        overlay.style.pointerEvents = 'none';
+        overlay.style.mixBlendMode = 'color-dodge';
+        body.appendChild(overlay);
+
+        // Add styles
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = `
+        .audio-dashboard {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 8px 16px;
+            z-index: 1001;
+            transition: all 0.3s ease;
+        }
+
+        .phonk-dashboard {
+            border: 2px solid #ff3300;
+            box-shadow: 0 0 20px rgba(255, 51, 0, 0.4);
+            animation: phonk-pulse 1.5s infinite alternate;
+        }
+
+        @keyframes phonk-pulse {
+            from { box-shadow: 0 0 15px rgba(255, 51, 0, 0.4); }
+            to { box-shadow: 0 0 30px rgba(255, 51, 0, 0.7); }
+        }
+
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .audio-title {
+            font-weight: bold;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .audio-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .audio-btn {
+            background-color: rgba(255, 51, 0, 0.2);
+            color: #ff3300;
+            border: 1px solid rgba(255, 51, 0, 0.3);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .audio-btn:hover {
+            background-color: #ff3300;
+            color: white;
+        }
+
+        .phonk-overlay {
+            background-color: rgba(20, 0, 0, 0.2);
+            animation: phonkColorChange 3s infinite alternate;
+        }
+
+        @keyframes phonkColorChange {
+            0% { background-color: rgba(20, 0, 0, 0.2); }
+            50% { background-color: rgba(50, 0, 0, 0.3); }
+            100% { background-color: rgba(70, 0, 0, 0.2); }
+        }
+
+        .phonk-icon {
+            animation: phonkVibrate 0.2s infinite alternate !important;
+            color: #ff3300 !important;
+            opacity: 1 !important;
+            filter: none !important;
+            text-shadow: 0 0 10px #ff3300 !important;
+        }
+
+        @keyframes phonkVibrate {
+            0% { transform: translate(-1px, -1px) rotate(-1deg); }
+            33% { transform: translate(1px, 0px) rotate(1deg); }
+            66% { transform: translate(0, 1px) rotate(0); }
+            100% { transform: translate(1px, 1px) rotate(1deg); }
+        }
+    `;
+        document.head.appendChild(styleSheet);
+
+        // Make all icons vibrate
+        const icons = document.querySelectorAll('.floating-icon');
+        icons.forEach(icon => {
+            icon.classList.add('phonk-icon');
+        });
+
+        // Add event listeners
+        let effectLevel = 1;
+        const effectBtn = dashboard.querySelector('.effect-btn');
+        const stopBtn = dashboard.querySelector('.stop-btn');
+
+        effectBtn.addEventListener('click', function() {
+            effectLevel = (effectLevel % 3) + 1;
+            effectBtn.textContent = `Effect: ${effectLevel}`;
+
+            // Apply different effects based on intensity level
+            switch(effectLevel) {
+                case 1:
+                    // Default effects
+                    overlay.style.animation = 'phonkColorChange 3s infinite alternate';
+                    document.querySelectorAll('h1, h2, h3').forEach(el => {
+                        el.style.animation = '';
+                    });
+                    icons.forEach(icon => {
+                        icon.style.animationDuration = '0.2s';
+                    });
+                    break;
+                case 2:
+                    // More intense effects
+                    overlay.style.animation = 'phonkColorChange 1s infinite alternate';
+                    document.querySelectorAll('h1, h2, h3').forEach(el => {
+                        el.style.animation = 'phonkVibrate 0.15s infinite';
+                    });
+                    icons.forEach(icon => {
+                        icon.style.animationDuration = '0.15s';
+                    });
+                    break;
+                case 3:
+                    // Go wild with effects
+                    overlay.style.animation = 'phonkColorChange 0.5s infinite alternate';
+                    document.querySelectorAll('h1, h2, h3, p, .btn').forEach(el => {
+                        el.style.animation = 'phonkVibrate 0.1s infinite';
+                    });
+                    icons.forEach(icon => {
+                        icon.style.animationDuration = '0.1s';
+                    });
+                    break;
+            }
+        });
+
+        stopBtn.addEventListener('click', function() {
+            // Fade out audio
+            const fadeInterval = setInterval(() => {
+                if (phonkAudio.volume > 0.1) {
+                    phonkAudio.volume -= 0.1;
+                } else {
+                    clearInterval(fadeInterval);
+                    phonkAudio.pause();
+                }
+            }, 100);
+
+            // Restore icons
+            icons.forEach(icon => {
+                icon.classList.remove('phonk-icon');
+                icon.style.animationDuration = '';
+            });
+
+            // Remove overlay with transition
+            overlay.style.opacity = '0';
+            setTimeout(() => overlay.remove(), 500);
+
+            // Remove dashboard with transition
+            dashboard.style.opacity = '0';
+            dashboard.style.transform = 'translateX(-50%) translateY(100px)';
+            setTimeout(() => {
+                dashboard.remove();
+                styleSheet.remove();
+            }, 500);
+
+            // Reset any animations on elements
+            document.querySelectorAll('h1, h2, h3, p, .btn').forEach(el => {
+                el.style.animation = '';
+            });
+
+
+            // Restore original title
+            heroTitle.innerHTML = originalTitle;
+        });
+    }
+
+    function activateLofiMode() {
+        const body = document.body;
+
+        // Check if any audio mode is already active
+        if (document.querySelector('.audio-dashboard')) {
+            return;
+        }
+
+        // Store original title to restore it later
+        const heroTitle = document.querySelector('.hero h1');
+        const originalTitle = heroTitle.innerHTML;
+
+        // Change the title
+        heroTitle.innerHTML = 'Lo-Fi <span>Enthusiast</span>';
+
+        // Create audio for lofi mode
+        const lofiAudio = new Audio('assets/sounds/lofi.mp3');
+        lofiAudio.loop = true;
+        lofiAudio.volume = 0.7;
+
+        // Play the audio with promise handling
+        const playPromise = lofiAudio.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.log("Audio playback failed: ", error);
+            });
+        }
+
+        // Create dashboard with the same structure as phonk dashboard
+        const dashboard = document.createElement('div');
+        dashboard.classList.add('audio-dashboard', 'lofi-dashboard');
+        dashboard.innerHTML = `
+        <div class="audio-controls">
+            <div class="audio-title">
+                <i class="fas fa-headphones"></i>
+                <span>Lofi Mode</span>
+            </div>
+            <div class="audio-actions">
+                <button class="audio-btn effect-btn">Effect: Low</button>
+                <button class="audio-btn stop-btn">Stop</button>
+            </div>
+        </div>
+    `;
+        body.appendChild(dashboard);
+
+        // Create color overlay for lofi aesthetic
+        const overlay = document.createElement('div');
+        overlay.classList.add('lofi-overlay');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.zIndex = '999';
+        overlay.style.pointerEvents = 'none';
+        overlay.style.mixBlendMode = 'overlay';
+        body.appendChild(overlay);
+
+        // Add styles - include complete dashboard styling
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = `
+        .audio-dashboard {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 16px;
+            z-index: 1000;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .lofi-dashboard {
+            background-color: rgba(66, 56, 157, 0.85);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 16px;
+            box-shadow: 0 0 20px rgba(66, 56, 157, 0.5);
+        }
+
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .audio-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .audio-title i {
+            color: #fff;
+        }
+
+        .audio-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .audio-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        .audio-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .lofi-overlay {
+            background: linear-gradient(45deg, rgba(61, 51, 121, 0.3), rgba(40, 27, 88, 0.3));
+            animation: lofiGradient 15s ease infinite;
+        }
+
+        @keyframes lofiGradient {
+            0% { opacity: 0.4; }
+            50% { opacity: 0.6; }
+            100% { opacity: 0.4; }
+        }
+
+        .lofi-float {
+            animation: lofiFloat 6s ease-in-out infinite !important;
+        }
+
+        @keyframes lofiFloat {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+    `;
+        document.head.appendChild(styleSheet);
+
+        // Add gentle floating animation to elements
+        const elements = document.querySelectorAll('h1, h2, h3, .btn, .project-card, .skill, img');
+        elements.forEach(el => {
+            if (!el.closest('nav, header, .audio-dashboard')) {
+                el.classList.add('lofi-float');
+            }
+        });
+
+        // Add event listeners
+        let effectLevel = 1;
+        const effectBtn = dashboard.querySelector('.effect-btn');
+        const stopBtn = dashboard.querySelector('.stop-btn');
+
+        effectBtn.addEventListener('click', function() {
+            effectLevel = effectLevel % 3 + 1;
+            this.textContent = `Effect: ${effectLevel === 1 ? 'Low' : effectLevel === 2 ? 'Medium' : 'High'}`;
+
+            // Adjust effects based on level
+            if (effectLevel === 1) {
+                overlay.style.opacity = '0.4';
+                document.documentElement.style.filter = 'sepia(0.2) hue-rotate(200deg)';
+                lofiAudio.volume = 0.5;
+            } else if (effectLevel === 2) {
+                overlay.style.opacity = '0.6';
+                document.documentElement.style.filter = 'sepia(0.4) hue-rotate(220deg)';
+                lofiAudio.volume = 0.7;
+            } else {
+                overlay.style.opacity = '0.8';
+                document.documentElement.style.filter = 'sepia(0.6) hue-rotate(240deg)';
+                lofiAudio.volume = 0.9;
+            }
+        });
+
+        stopBtn.addEventListener('click', function() {
+            // Stop audio
+            lofiAudio.pause();
+            lofiAudio.currentTime = 0;
+
+            // Remove overlay and dashboard
+            overlay.remove();
+            dashboard.remove();
+            styleSheet.remove();
+
+            // Remove filter
+            document.documentElement.style.filter = 'none';
+
+            // Remove animation classes
+            document.querySelectorAll('.lofi-float').forEach(el => {
+                el.classList.remove('lofi-float');
+            });
+
+            // Restore original title
+            heroTitle.innerHTML = originalTitle;
+        });
+    }
+
+    // Easter Egg: Snow Mode - type "snow"
+    let snowWord = "snow";
+    let snowPosition = 0;
+    let snowflakes = [];
+
+    document.addEventListener('keypress', function(e) {
+        // Check if the key pressed is the expected letter in "snow"
+        if (e.key.toLowerCase() === snowWord[snowPosition]) {
+            snowPosition++;
+
+            if (snowPosition === snowWord.length) {
+                activateSnowMode();
+                snowPosition = 0;
+            }
+        } else {
+            snowPosition = 0;
+        }
+    });
+
+    function activateSnowMode() {
+        // Check if snow mode is already active
+        if (document.querySelector('.snow-container')) {
+            return;
+        }
+
+        // Create container for snowflakes
+        const snowContainer = document.createElement('div');
+        snowContainer.classList.add('snow-container');
+        snowContainer.style.position = 'fixed';
+        snowContainer.style.top = '0';
+        snowContainer.style.left = '0';
+        snowContainer.style.width = '100%';
+        snowContainer.style.height = '100%';
+        snowContainer.style.pointerEvents = 'none';
+        snowContainer.style.zIndex = '1000';
+        snowContainer.style.overflow = 'hidden';
+        document.body.appendChild(snowContainer);
+
+        // Create message
+        const message = document.createElement('div');
+        message.classList.add('snow-message');
+        message.innerHTML = '❄️ LET IT SNOW! <span class="snow-toggle">More Snow</span> or press ESC to stop ❄️';
+        message.style.position = 'fixed';
+        message.style.top = '20px';
+        message.style.left = '50%';
+        message.style.transform = 'translateX(-50%)';
+        message.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+        message.style.color = '#0F172A';
+        message.style.padding = '12px 20px';
+        message.style.borderRadius = '20px';
+        message.style.fontWeight = 'bold';
+        message.style.zIndex = '1001';
+        message.style.boxShadow = '0 0 15px rgba(255, 255, 255, 0.5)';
+        document.body.appendChild(message);
+
+        // Style for the toggle button
+        const toggleBtn = message.querySelector('.snow-toggle');
+        toggleBtn.style.color = '#3B82F6';
+        toggleBtn.style.cursor = 'pointer';
+        toggleBtn.style.textDecoration = 'underline';
+        toggleBtn.style.marginLeft = '5px';
+        toggleBtn.style.marginRight = '5px';
+
+        // Create snowflake style
+        const snowStyle = document.createElement('style');
+        snowStyle.textContent = `
+        .snowflake {
+            position: absolute;
+            color: white;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+            pointer-events: none;
+        }
+
+        @keyframes snowfall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                transform: translateY(calc(100vh + 20px));
+            }
+        }
+    `;
+        document.head.appendChild(snowStyle);
+
+        // Snowflake characters
+        const snowflakeChars = ['❄', '❅', '❆', '✱', '✲', '✻'];
+
+        // Snowflake creator function
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.textContent = snowflakeChars[Math.floor(Math.random() * snowflakeChars.length)];
+
+            // Random position, size and animation duration
+            const size = Math.random() * 20 + 10;
+            const left = Math.random() * window.innerWidth;
+            const opacity = Math.random() * 0.6 + 0.4;
+            const duration = Math.random() * 8 + 5;
+
+            snowflake.style.left = left + 'px';
+            snowflake.style.top = '-20px';
+            snowflake.style.fontSize = size + 'px';
+            snowflake.style.opacity = opacity;
+            snowflake.style.animation = `snowfall ${duration}s linear forwards`;
+
+            // Add some horizontal movement during fall
+            snowflake.style.animationTimingFunction = 'linear';
+
+            // Track horizontal position for animation
+            let horizontalPos = left;
+            let horizontalSpeed = Math.random() * 2 - 1; // Random speed between -1 and 1
+            let rotation = 0;
+            let rotationSpeed = Math.random() * 2 - 1;
+
+            // Add to snowflakes array for movement
+            snowflakes.push({
+                element: snowflake,
+                horizontalPos: horizontalPos,
+                horizontalSpeed: horizontalSpeed,
+                rotation: rotation,
+                rotationSpeed: rotationSpeed,
+                startTime: Date.now(),
+                duration: duration * 1000 // Convert to milliseconds
+            });
+
+            // Append to container
+            snowContainer.appendChild(snowflake);
+
+            // Remove snowflake after animation completes
+            setTimeout(() => {
+                if (snowflake.parentNode === snowContainer) {
+                    snowContainer.removeChild(snowflake);
+                    // Also remove from array
+                    snowflakes = snowflakes.filter(s => s.element !== snowflake);
+                }
+            }, duration * 1000);
+        }
+
+        // Animate snowflakes horizontally
+        function animateSnowflakes() {
+            const now = Date.now();
+
+            snowflakes.forEach(snowflake => {
+                // Calculate vertical position based on time elapsed
+                const timePassed = now - snowflake.startTime;
+                const progress = timePassed / snowflake.duration;
+                const verticalPos = progress * (window.innerHeight + 20);
+
+                // Update horizontal position
+                snowflake.horizontalPos += snowflake.horizontalSpeed;
+
+                // Add some wind effect
+                const windEffect = Math.sin(now / 2000) * 0.5;
+                snowflake.horizontalPos += windEffect;
+
+                // Update rotation
+                snowflake.rotation += snowflake.rotationSpeed;
+
+                // Apply changes
+                snowflake.element.style.transform = `translateX(${snowflake.horizontalPos - parseFloat(snowflake.element.style.left)}px) translateY(${verticalPos}px) rotate(${snowflake.rotation}deg)`;
+            });
+
+            if (document.querySelector('.snow-container')) {
+                requestAnimationFrame(animateSnowflakes);
+            }
+        }
+
+        // Start animation
+        requestAnimationFrame(animateSnowflakes);
+
+        // Create snowflakes periodically
+        let snowflakeDensity = 1; // Initial density
+        let snowInterval = setInterval(() => {
+            for (let i = 0; i < snowflakeDensity; i++) {
+                createSnowflake();
+            }
+        }, 300);
+
+        // Add click handler for more snow
+        toggleBtn.addEventListener('click', function() {
+            snowflakeDensity = (snowflakeDensity % 3) + 1;
+            this.textContent = `Snow: ${snowflakeDensity === 1 ? 'Light' : snowflakeDensity === 2 ? 'Medium' : 'Heavy'}`;
+        });
+
+        // Add escape key to stop snow
+        function stopSnow(e) {
+            if (e.key === 'Escape') {
+                clearInterval(snowInterval);
+
+                // Fade out message
+                const message = document.querySelector('.snow-message');
+                if (message) {
+                    message.style.opacity = '0';
+                    message.style.transition = 'opacity 0.5s ease';
+                }
+
+                // Fade out snowflakes
+                const snowContainer = document.querySelector('.snow-container');
+                if (snowContainer) {
+                    snowContainer.style.opacity = '0';
+                    snowContainer.style.transition = 'opacity 1s ease';
+
+                    // Remove after transition
+                    setTimeout(() => {
+                        if (message && message.parentNode) message.parentNode.removeChild(message);
+                        if (snowContainer && snowContainer.parentNode) snowContainer.parentNode.removeChild(snowContainer);
+                        document.removeEventListener('keydown', stopSnow);
+                        snowflakes = [];
+                    }, 1000);
+                }
+            }
+        }
+
+        document.addEventListener('keydown', stopSnow);
+    }
 </script>
 </body>
 </html>
