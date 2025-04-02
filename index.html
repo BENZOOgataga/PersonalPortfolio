@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BENZOOgataga | Personal Projects</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+    <nav>
+        <div class="logo">BENZOO<span>gataga</span></div>
+        <ul class="nav-links">
+            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+</header>
+
+<section id="home" class="hero">
+    <div class="floating-icons">
+        <!-- Top Row (avoiding center) -->
+        <i class="fab fa-js-square floating-icon" style="top: 10%; left: 10%; animation-delay: 0s; font-size: 2.2rem;"></i>
+        <i class="fas fa-code floating-icon" style="top: 15%; left: 25%; animation-delay: 1.2s; font-size: 1.8rem;"></i>
+        <i class="fab fa-react floating-icon" style="top: 8%; left: 75%; animation-delay: 2.5s; font-size: 2.4rem;"></i>
+        <i class="fab fa-github floating-icon" style="top: 12%; left: 90%; animation-delay: 3.2s; font-size: 1.9rem;"></i>
+
+        <!-- Left Side -->
+        <i class="fab fa-node-js floating-icon" style="top: 30%; left: 8%; animation-delay: 2s; font-size: 2.6rem;"></i>
+        <i class="fas fa-database floating-icon" style="top: 40%; left: 15%; animation-delay: 3.5s; font-size: 1.6rem;"></i>
+        <i class="fab fa-java floating-icon" style="top: 55%; left: 5%; animation-delay: 1.7s; font-size: 2.3rem;"></i>
+        <i class="fab fa-html5 floating-icon" style="top: 70%; left: 12%; animation-delay: 4s; font-size: 2.4rem;"></i>
+
+        <!-- Right Side -->
+        <i class="fab fa-discord floating-icon" style="top: 25%; left: 85%; animation-delay: 1s; font-size: 2.5rem;"></i>
+        <i class="fab fa-css3-alt floating-icon" style="top: 45%; left: 92%; animation-delay: 2.8s; font-size: 2.3rem;"></i>
+        <i class="fas fa-terminal floating-icon" style="top: 60%; left: 88%; animation-delay: 5.2s; font-size: 1.8rem;"></i>
+        <i class="fab fa-python floating-icon" style="top: 75%; left: 95%; animation-delay: 0.5s; font-size: 1.9rem;"></i>
+
+        <!-- Bottom Row (avoiding center) -->
+        <i class="fas fa-gamepad floating-icon" style="top: 85%; left: 20%; animation-delay: 3.4s; font-size: 2.1rem;"></i>
+        <i class="fab fa-git-alt floating-icon" style="top: 90%; left: 40%; animation-delay: 3.7s; font-size: 1.7rem;"></i>
+        <i class="fas fa-server floating-icon" style="top: 92%; left: 60%; animation-delay: 4.8s; font-size: 2rem;"></i>
+        <i class="fab fa-npm floating-icon" style="top: 88%; left: 80%; animation-delay: 4.1s; font-size: 1.7rem;"></i>
+
+        <!-- Additional icons for better coverage (carefully avoiding center) -->
+        <i class="fab fa-bootstrap floating-icon" style="top: 30%; left: 28%; animation-delay: 5.5s; font-size: 1.8rem;"></i>
+        <i class="fab fa-wordpress floating-icon" style="top: 25%; left: 72%; animation-delay: 6.2s; font-size: 1.7rem;"></i>
+        <i class="fas fa-cloud floating-icon" style="top: 65%; left: 32%; animation-delay: 2.3s; font-size: 1.9rem;"></i>
+        <i class="fas fa-cog floating-icon" style="top: 70%; left: 68%; animation-delay: 4.5s; font-size: 1.6rem;"></i>
+    </div>
+    <div class="container">
+        <h1>Project <span>Enthusiast</span></h1>
+        <p>Creating digital experiences across multiple platforms</p>
+        <div class="cta-buttons">
+            <a href="#projects" class="btn primary-btn">View Projects</a>
+            <a href="#contact" class="btn secondary-btn">Get in Touch</a>
+        </div>
+    </div>
+</section>
+
+<section id="projects" class="projects">
+    <div class="container">
+        <h2>Featured <span>Projects</span></h2>
+        <div class="project-filter">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="discord">Discord Bots</button>
+            <button class="filter-btn" data-filter="games">Games</button>
+            <button class="filter-btn" data-filter="web">Web</button>
+            <button class="filter-btn" data-filter="minecraft">Minecraft</button>
+        </div>
+        <div class="projects-grid">
+            <div class="project-card" data-category="discord">
+                <div class="project-img">
+                    <img src="assets/images/flazebot.jpg" alt="FlazeBot">
+                </div>
+                <div class="project-info">
+                    <h3>FlazeBot</h3>
+                    <p>Radio-based Discord bot</p>
+                    <div class="project-meta">
+                        <span class="tag">Co-Founder</span>
+                        <a href="https://flazebot.com" class="project-link" target="_blank">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card" data-category="games">
+                <div class="project-img">
+                    <img src="assets/images/lyrastudio.jpg" alt="LyraStudio">
+                </div>
+                <div class="project-info">
+                    <h3>LyraStudio</h3>
+                    <p>Game development studio</p>
+                    <div class="project-meta">
+                        <span class="tag">Founder</span>
+                        <a href="#" class="project-link">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card" data-category="minecraft">
+                <div class="project-img">
+                    <img src="assets/images/flazesmp.jpg" alt="Flaze SMP">
+                </div>
+                <div class="project-info">
+                    <h3>Flaze SMP</h3>
+                    <p>Modded Minecraft server</p>
+                    <div class="project-meta">
+                        <span class="tag">Founder</span>
+                        <a href="#" class="project-link">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- Add more project cards here -->
+        </div>
+    </div>
+</section>
+
+<section id="about" class="about">
+    <div class="container">
+        <div class="about-content">
+            <div class="about-text">
+                <h2>About <span>Me</span></h2>
+                <p>I'm a versatile project enthusiast who explores various domains of technology. Whether it's building Discord bots, creating games, designing websites and other assets, or developing Minecraft servers, I touch everything that amazes me and keeps me learning.</p>
+                <p>My passion for technology drives me to continuously explore new areas and expand my skillset. I believe in creating digital experiences that are not only functional but also engaging and memorable.</p>
+                <div class="skills">
+                    <h3>Tech Stack</h3>
+                    <div class="skill-tags">
+                        <span class="skill">JavaScript</span>
+                        <span class="skill">Node.js</span>
+                        <span class="skill">HTML/CSS</span>
+                        <span class="skill">Game Design</span>
+                        <span class="skill">UI/UX</span>
+                        <span class="skill">Discord API</span>
+                        <span class="skill">Minecraft Modding</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="contact" class="contact">
+    <div class="container">
+        <h2>Get in <span>Touch</span></h2>
+        <p>Interested in collaborating or just want to say hi? Feel free to reach out!</p>
+        <div class="contact-grid">
+            <div class="contact-form">
+                <form action="#" method="post">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="6" required></textarea>
+                    </div>
+                    <button type="submit" class="btn primary-btn">Send Message</button>
+                </form>
+            </div>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>contact@benzoogataga.com</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-discord"></i>
+                    <span>benzoogataga</span>
+                </div>
+                <div class="social-links">
+                    <a href="#" target="https://github.com/BENZOOgataga"><i class="fab fa-github"></i></a>
+                    <a href="#" target="https://x.com/BENZOOgataga"><i class="fab fa-twitter"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-logo">
+                BENZOO<span>gataga</span>
+            </div>
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#projects">Projects</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; <span id="year"></span> BENZOOgataga. All rights reserved.
+        </div>
+    </div>
+</footer>
+
+<script src="assets/js/script.js"></script>
+<script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
