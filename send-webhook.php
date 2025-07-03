@@ -24,7 +24,7 @@ $payload = json_encode([
             ['name' => '💬 Message', 'value' => substr($data['message'], 0, 1000)],
         ],
         'timestamp' => date(DATE_ATOM),
-        'footer' => ['text' => 'LyraStudio Contact Form']
+        'footer' => ['text' => 'BENZOOgataga Contact Form']
     ]]
 ]);
 

@@ -1019,6 +1019,10 @@ footer {
     position: relative;
     color: var(--text-light);
     font-size: 1rem;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .custom-select-selected::after {
@@ -1037,9 +1041,11 @@ footer {
 }
 
 .custom-select-selected:hover,
+.custom-select-selected:focus,
 .custom-select-container.open .custom-select-selected {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+    outline: none;
 }
 
 .custom-select-options {
@@ -1056,10 +1062,16 @@ footer {
     transition: all var(--animation-speed) ease;
     z-index: 1000;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transform: translateY(-10px);
 }
 
 .custom-select-container.open .custom-select-options {
-    max-height: 300px;
+    max-height: 200px;
+    opacity: 1;
+    transform: translateY(0);
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .custom-select-item {
@@ -1068,20 +1080,52 @@ footer {
     transition: background var(--animation-speed) ease;
     color: var(--text-light);
     border-bottom: 1px solid var(--border-color);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .custom-select-item:last-child {
     border-bottom: none;
 }
 
-.custom-select-item:hover {
+.custom-select-item:hover,
+.custom-select-item:focus {
     background: rgba(139, 92, 246, 0.1);
     color: var(--primary-color);
+    outline: none;
 }
 
 .custom-select-item.selected {
     background: var(--primary-color);
     color: white;
+}
+
+/* Custom scrollbar for dropdown */
+.custom-select-options::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-select-options::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 0 10px 10px 0;
+}
+
+.custom-select-options::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
+    opacity: 0.7;
+}
+
+.custom-select-options::-webkit-scrollbar-thumb:hover {
+    background: rgba(139, 92, 246, 0.9);
+}
+
+/* Firefox scrollbar styling */
+.custom-select-options {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) transparent;
 }
 
 .hidden-select {
