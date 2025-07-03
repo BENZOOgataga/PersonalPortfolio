@@ -214,7 +214,7 @@
         <p>Interested in collaborating or just want to say hi? Feel free to reach out!</p>
         <div class="contact-grid">
             <div class="contact-form">
-                <form action="https://formspree.io/f/xqapnwoq" method="POST" enctype="multipart/form-data">
+                <form id="contact-form">
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input type="text" id="name" name="name" required>
@@ -224,12 +224,30 @@
                         <input type="email" id="email" name="email" required>
                     </div>
                     <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" rows="6" required></textarea>
+                        <label for="subject">Subject</label>
+                        <div class="custom-select-container">
+                            <div class="custom-select-selected">General Inquiry</div>
+                            <div class="custom-select-options">
+                                <div class="custom-select-item selected" data-value="general">General Inquiry</div>
+                                <div class="custom-select-item" data-value="project">Project Collaboration</div>
+                                <div class="custom-select-item" data-value="discord">Discord Bot Development</div>
+                                <div class="custom-select-item" data-value="minecraft">Minecraft Server/Modding</div>
+                                <div class="custom-select-item" data-value="web">Web Development</div>
+                                <div class="custom-select-item" data-value="other">Other</div>
+                            </div>
+                            <select name="subject" class="hidden-select" required>
+                                <option value="general" selected>General Inquiry</option>
+                                <option value="project">Project Collaboration</option>
+                                <option value="discord">Discord Bot Development</option>
+                                <option value="minecraft">Minecraft Server/Modding</option>
+                                <option value="web">Web Development</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="projects">File (optional)</label>
-                        <input type="file" name="projects">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="6" required></textarea>
                     </div>
                     <button type="submit" class="btn primary-btn">Send Message</button>
                 </form>
@@ -286,38 +304,240 @@
             window.history.replaceState(null, null, window.location.href);
         }
 
-        // Add submit event listener
+        // Contact Form Setup
         if (contactForm) {
             // Change the form action to JavaScript:void(0) instead of "#"
             contactForm.setAttribute('action', 'javascript:void(0);');
-
-            contactForm.addEventListener('submit', function(e) {
-                // Prevent the default form submission
-                e.preventDefault();
-
-                // Show a success message
-                const formGroups = this.querySelectorAll('.form-group');
-                const submitBtn = this.querySelector('button[type="submit"]');
-
-                // Create success message
-                const successMessage = document.createElement('div');
-                successMessage.style.color = 'var(--primary-color)';
-                successMessage.style.padding = '15px 0';
-                successMessage.style.textAlign = 'center';
-                successMessage.innerHTML = '<i class="fas fa-check-circle"></i> Message sent successfully!';
-
-                // Insert before submit button
-                submitBtn.parentNode.insertBefore(successMessage, submitBtn);
-
-                // Reset form fields
-                this.reset();
-
-                // Remove message after 3 seconds
-                setTimeout(() => {
-                    successMessage.remove();
-                }, 3000);
-            });
         }
+
+        // Contact Form Functionality
+        document.getElementById('contact-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Check cooldown
+            const lastSubmission = localStorage.getItem('lastContactSubmission');
+            const cooldownTime = 5 * 60 * 1000; // 5 minutes in milliseconds
+            const now = Date.now();
+
+            if (lastSubmission && (now - parseInt(lastSubmission)) < cooldownTime) {
+                const remainingTime = Math.ceil((cooldownTime - (now - parseInt(lastSubmission))) / 1000 / 60);
+                showNotification(`⏱️ Please wait ${remainingTime} minute(s) before sending another message.`, 'error');
+                return;
+            }
+
+            // Get form data
+            const formData = new FormData(this);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const subject = formData.get('subject');
+            const message = formData.get('message');
+
+            // Get the submit button and disable it during submission
+            const submitButton = this.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            submitButton.textContent = 'Sending...';
+            submitButton.disabled = true;
+
+            try {
+                const payload = {
+                    name,
+                    email,
+                    subject,
+                    message
+                };
+
+                const response = await fetch('send-webhook.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    // Store submission timestamp for cooldown
+                    localStorage.setItem('lastContactSubmission', Date.now().toString());
+                    
+                    // Success - show success message
+                    showNotification('✅ Message sent successfully! We\'ll get back to you soon.', 'success');
+                    this.reset();
+                    // Reset custom select to default
+                    const customSelect = document.querySelector('.custom-select-selected');
+                    const firstOption = document.querySelector('.custom-select-item[data-value="general"]');
+                    customSelect.textContent = firstOption.textContent;
+                    document.querySelector('.hidden-select').value = 'general';
+                    document.querySelectorAll('.custom-select-item').forEach(opt => opt.classList.remove('selected'));
+                    firstOption.classList.add('selected');
+                } else {
+                    throw new Error('Failed to send message');
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+                showNotification('❌ Failed to send message. Please try again or contact us directly.', 'error');
+            } finally {
+                // Re-enable submit button
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+            }
+        });
+
+        // Notification system
+        function showNotification(message, type = 'success') {
+            // Remove any existing notifications
+            const existingNotification = document.querySelector('.notification');
+            if (existingNotification) {
+                existingNotification.remove();
+            }
+
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            
+            // Add to page
+            document.body.appendChild(notification);
+            
+            // Show notification with animation
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 5000);
+        }
+
+        // Custom select dropdown functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const customSelect = document.querySelector('.custom-select-container');
+            const selected = customSelect.querySelector('.custom-select-selected');
+            const options = customSelect.querySelectorAll('.custom-select-item');
+            const hiddenSelect = customSelect.querySelector('.hidden-select');
+
+            // Toggle dropdown on click
+            selected.addEventListener('click', function() {
+                customSelect.classList.toggle('open');
+
+                // Close dropdown when clicking outside
+                if (customSelect.classList.contains('open')) {
+                    document.addEventListener('click', closeDropdown);
+                } else {
+                    document.removeEventListener('click', closeDropdown);
+                }
+            });
+
+            // Handle option selection
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Update visual selection
+                    options.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+
+                    // Update displayed value
+                    selected.textContent = this.textContent;
+
+                    // Update hidden select value for form submission
+                    hiddenSelect.value = this.getAttribute('data-value');
+
+                    // Close dropdown
+                    customSelect.classList.remove('open');
+                    
+                    // Validate form after selection
+                    validateForm();
+                });
+            });
+
+            // Close dropdown when clicking outside
+            function closeDropdown(e) {
+                if (!customSelect.contains(e.target)) {
+                    customSelect.classList.remove('open');
+                    document.removeEventListener('click', closeDropdown);
+                }
+            }
+
+            // Form validation
+            const form = document.getElementById('contact-form');
+            const submitButton = form.querySelector('button[type="submit"]');
+            const requiredFields = form.querySelectorAll('input[required], textarea[required]');
+
+            // Add input event listeners for real-time validation
+            requiredFields.forEach(field => {
+                field.addEventListener('input', validateForm);
+                field.addEventListener('blur', validateForm);
+            });
+
+            function validateForm() {
+                let isValid = true;
+                
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        isValid = false;
+                    }
+                });
+
+                // Check email format
+                const emailField = document.getElementById('email');
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (emailField.value && !emailRegex.test(emailField.value)) {
+                    isValid = false;
+                }
+
+                // Check cooldown
+                const lastSubmission = localStorage.getItem('lastContactSubmission');
+                const cooldownTime = 5 * 60 * 1000; // 5 minutes in milliseconds
+                const now = Date.now();
+                let isOnCooldown = false;
+
+                if (lastSubmission && (now - parseInt(lastSubmission)) < cooldownTime) {
+                    isOnCooldown = true;
+                    const remainingTime = Math.ceil((cooldownTime - (now - parseInt(lastSubmission))) / 1000 / 60);
+                    submitButton.textContent = `Wait ${remainingTime}min`;
+                } else {
+                    submitButton.textContent = 'Send Message';
+                }
+
+                const finalIsValid = isValid && !isOnCooldown;
+                submitButton.disabled = !finalIsValid;
+                submitButton.style.opacity = finalIsValid ? '1' : '0.6';
+                submitButton.style.cursor = finalIsValid ? 'pointer' : 'not-allowed';
+            }
+
+            // Update cooldown timer every second
+            function updateCooldownTimer() {
+                const lastSubmission = localStorage.getItem('lastContactSubmission');
+                if (!lastSubmission) return;
+
+                const cooldownTime = 5 * 60 * 1000; // 5 minutes in milliseconds
+                const now = Date.now();
+                const timeLeft = cooldownTime - (now - parseInt(lastSubmission));
+
+                if (timeLeft > 0) {
+                    const remainingMinutes = Math.ceil(timeLeft / 1000 / 60);
+                    submitButton.textContent = `Wait ${remainingMinutes}min`;
+                    submitButton.disabled = true;
+                    submitButton.style.opacity = '0.6';
+                    submitButton.style.cursor = 'not-allowed';
+                    
+                    // Continue updating
+                    setTimeout(updateCooldownTimer, 1000);
+                } else {
+                    // Cooldown expired, re-validate form
+                    validateForm();
+                }
+            }
+
+            // Initial validation
+            validateForm();
+            
+            // Start cooldown timer if needed
+            updateCooldownTimer();
+        });
 
         // Easter Egg 1: Konami Code
         const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
@@ -911,6 +1131,8 @@
             // Restore icons
             icons.forEach(icon => {
                 icon.classList.remove('party-icon');
+                icon.style.top = originalPositions[index].top;
+                icon.style.left = originalPositions[index].left;
             });
 
             // Remove overlay with transition
