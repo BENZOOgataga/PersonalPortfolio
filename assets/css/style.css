@@ -473,18 +473,31 @@ nav {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
+/* Projects - unified project image/card styling */
 .project-img {
+    position: relative;
     height: 200px;
     overflow: hidden;
+    display: block;
+    background: transparent;
+}
+
+.project-img > a {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 .project-img img {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s ease;
+    object-position: center;
+    transition: transform 0.45s ease;
 }
 
+/* Bottom gradient overlay that darkens the lower part of images for consistent legibility */
 .project-img::after {
     content: '';
     position: absolute;
@@ -494,18 +507,112 @@ nav {
     height: 40%;
     background: linear-gradient(to top, rgba(30, 41, 59, 0.8), transparent);
     z-index: 1;
+    pointer-events: none;
 }
 
+/* Hover zoom for images (applies uniformly) */
 .project-card:hover .project-img img {
     transform: scale(1.05);
 }
 
+/* Project info layout */
 .project-info {
     padding: 16px 18px;
     position: relative;
     padding-bottom: 18px;
     display: flex;
     flex-direction: column;
+}
+
+/* Per-card overrides: GhostOS and Deltora keep their unique visuals but sit on the same base */
+.ghostos-img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: linear-gradient(180deg, #07110a 0%, #0b0f0b 100%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+}
+.ghostos-img::after { display: none; }
+.ghostos-img::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 1;
+}
+.ghostos-text {
+    font-family: 'Fira Mono', 'Consolas', 'Courier New', monospace;
+    color: #00ff55;
+    font-size: 2rem;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    z-index: 2;
+    text-shadow: 0 0 6px rgba(0,255,85,0.08);
+}
+
+/* Typing animation for GhostOS */
+.ghostos-typing {
+    display: inline-block;
+    white-space: nowrap;
+    /* Reserve a little room for the separate cursor so it doesn't overlap text */
+    padding-right: 0.5ch;
+    box-sizing: content-box;
+    /* Simple fade-in for reliability across browsers */
+    animation: ghostos-fade 1.2s ease both, ghostos-flicker 4s linear infinite;
+    vertical-align: bottom;
+}
+
+.ghostos-cursor {
+    display: inline-block;
+    margin-left: 0.25ch;
+    color: #00ff55;
+    width: 0.6ch;
+    box-sizing: content-box;
+    /* simple blink animation (defined below) — no border on the typing element to avoid overlap */
+    animation: ghostos-cursor 0.9s steps(1, end) infinite;
+    vertical-align: bottom;
+}
+
+@keyframes ghostos-flicker {
+    0% { opacity: 1; }
+    5% { opacity: 0.95; }
+    10% { opacity: 1; }
+    12% { opacity: 0.9; }
+    15% { opacity: 1; }
+    100% { opacity: 1; }
+}
+
+@keyframes ghostos-cursor {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* New fade-in animation for the GhostOS label to avoid step-width glitches */
+@keyframes ghostos-fade {
+    0% { opacity: 0; transform: translateY(6px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Deltora: stylish background to match the image palette; image itself uses contain so it doesn't crop */
+.deltora-img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: linear-gradient(135deg, #3b0b66 0%, #4f46e5 50%, #2563eb 100%);
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid rgba(255,255,255,0.03);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    border-radius: 6px;
+}
+.deltora-img img {
+    object-fit: contain;
+    object-position: center;
 }
 
 .project-info h3 {
@@ -531,15 +638,36 @@ nav {
 
 .tag {
     display: inline-block;
-    background-color: rgba(139, 92, 246, 0.1);
+    background-color: rgba(139, 92, 246, 0.12);
     color: var(--primary-color);
-    padding: 3px 10px;
+    padding: 4px 10px;
     border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 500;
+    font-size: 0.78rem;
+    font-weight: 600;
     letter-spacing: 0.3px;
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    border: 1px solid rgba(139, 92, 246, 0.28);
 }
+
+/* Ensure tags inside project cards are visually consistent */
+.project-card .project-meta .tag {
+    background-color: rgba(139, 92, 246, 0.12);
+    color: var(--primary-color);
+    border: 1px solid rgba(139, 92, 246, 0.28);
+}
+
+/* Enforce identical appearance for all project tags to avoid per-card differences */
+.projects-grid .project-card .project-meta .tag {
+    background-color: rgba(139, 92, 246, 0.12) !important;
+    color: var(--primary-color) !important;
+    border: 1px solid rgba(139, 92, 246, 0.28) !important;
+    padding: 4px 10px !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    border-radius: 4px !important;
+    display: inline-block !important;
+}
+
+/* (Duplicate GhostOS block removed; GhostOS and Deltora are defined above) */
 
 .project-link {
     width: 32px;
